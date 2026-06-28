@@ -1642,3 +1642,114 @@ td a {
     padding: 24px;
   }
 }
+
+/* Auto-moving gallery slider */
+.gallery-slider {
+  margin: 0 auto;
+  max-width: 1390px;
+  overflow: hidden;
+  padding: 8px 0 18px;
+  position: relative;
+}
+
+.gallery-slider::before,
+.gallery-slider::after {
+  content: "";
+  height: 100%;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  width: min(12vw, 140px);
+  z-index: 3;
+}
+
+.gallery-slider::before {
+  background: linear-gradient(90deg, #f7f1e8, rgba(247, 241, 232, 0));
+  left: 0;
+}
+
+.gallery-slider::after {
+  background: linear-gradient(270deg, #f7f1e8, rgba(247, 241, 232, 0));
+  right: 0;
+}
+
+.gallery-track {
+  animation: gallery-marquee 42s linear infinite;
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  will-change: transform;
+}
+
+.gallery-slider:hover .gallery-track {
+  animation-play-state: paused;
+}
+
+.gallery-slider .gallery-item {
+  flex: 0 0 clamp(280px, 30vw, 390px);
+  height: clamp(230px, 26vw, 330px);
+  margin: 0;
+}
+
+.gallery-slider .gallery-item:nth-child(3n + 2) {
+  flex-basis: clamp(320px, 38vw, 520px);
+}
+
+.gallery-slider .gallery-item:nth-child(5n) {
+  flex-basis: clamp(260px, 28vw, 350px);
+}
+
+@keyframes gallery-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-50% - 10px));
+  }
+}
+
+@media (max-width: 650px) {
+  .gallery-slider {
+    margin-left: -12px;
+    margin-right: -12px;
+  }
+
+  .gallery-slider::before,
+  .gallery-slider::after {
+    width: 42px;
+  }
+
+  .gallery-track {
+    gap: 14px;
+  }
+
+  .gallery-slider .gallery-item,
+  .gallery-slider .gallery-item:nth-child(3n + 2),
+  .gallery-slider .gallery-item:nth-child(5n) {
+    flex-basis: 78vw;
+    height: 230px;
+  }
+
+  @keyframes gallery-marquee {
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(calc(-50% - 7px));
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-track {
+    animation: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+
+  .gallery-slider .gallery-item {
+    scroll-snap-align: center;
+  }
+}
